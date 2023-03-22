@@ -58,14 +58,14 @@ app.post('/api/upload/:userId', async (req, res) => {
     const userId = req.params.userId;
     const authorizationHeader = req.headers.authorization;
     if (!authorizationHeader) {
-        console.log("no", authorizationHeader)
+        
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
     const accessToken = authorizationHeader.split(' ')[1];
     const verifier = await verifyToken(accessToken);
-    console.log(verifier)
-    if (!verifier) {
+    
+    if (!verifier || verifier.sub!==userId) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
@@ -83,7 +83,7 @@ app.post('/api/upload/:userId', async (req, res) => {
 app.get('/api/files/:userId', async (req, res) => {
     const userId = req.params.userId;
     const authorizationHeader = req.headers.authorization;
-    console.log(authorizationHeader)
+    
     if (!authorizationHeader) {
 
         return res.status(401).json({ message: 'Unauthorized' });
@@ -92,8 +92,8 @@ app.get('/api/files/:userId', async (req, res) => {
     const accessToken = authorizationHeader.split(' ')[1];
 
     const verifier = await verifyToken(accessToken);
-    console.log(verifier)
-    if (!verifier) {
+    
+    if (!verifier || verifier.sub!==userId) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
@@ -116,14 +116,15 @@ app.get('/api/files/:userId/:filename', async (req, res) => {
     const filepath = path.join(__dirname, 'uploads', userId, filename);
     const authorizationHeader = req.headers.authorization;
     if (!authorizationHeader) {
-        console.log("no", authorizationHeader)
+        
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
     const accessToken = authorizationHeader.split(' ')[1];
 
     const verifier = await verifyToken(accessToken);
-    if (!verifier) {
+    
+    if (!verifier || verifier.sub!==userId) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
     res.sendFile(filepath);
@@ -143,7 +144,7 @@ app.get('/api/files/display/:userId/:filename/:accessToken', async (req, res) =>
 
     const verifier = await verifyToken(accessToken);
 
-    if (!verifier) {
+    if (!verifier || verifier.sub!==userId) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
