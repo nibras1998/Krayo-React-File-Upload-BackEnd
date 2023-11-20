@@ -1,4 +1,4 @@
-const express = require('express');
+express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -8,6 +8,7 @@ const CLIENT_ID = "ClientID"
 const axios = require('axios');
 
 async function verifyToken(token) {
+//To check the token is valid or not
     try {
         const response = await axios.get(`https://oauth2.googleapis.com/tokeninfo?access_token=${token}`);
         const { data } = response;
