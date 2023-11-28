@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors')
 const mime = require('mime');
-const CLIENT_ID = "ClientID"
+const CLIENT_ID = "GoogleClientID"
 const axios = require('axios');
 
 async function verifyToken(token) {
